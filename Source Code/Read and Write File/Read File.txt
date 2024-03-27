@@ -1,0 +1,43 @@
+#include <iostream>
+#include <windows.h>
+
+using namespace std;
+
+int main() {
+	LPCWSTR fileName = L"C:\\Users\\ASUS\\source\\repos\\ConsoleApplication1\\Hello.txt";
+	DWORD dwBytesRead;
+	char buffer[1024] = { 0 };
+
+	HANDLE fileHandle = CreateFileW(
+		fileName,
+		GENERIC_READ,
+		0,
+		NULL,
+		OPEN_ALWAYS,
+		FILE_ATTRIBUTE_NORMAL,
+		NULL
+	);
+
+	if (fileHandle == INVALID_HANDLE_VALUE) {
+		cout << "Error Happend: %lu\n", GetLastError();
+		return 1;
+	}
+	BOOL readContent = ReadFile(
+		fileHandle,
+		buffer,
+		sizeof(buffer),
+		&dwBytesRead,
+		NULL
+	);
+
+	if (!readContent) {
+		cout << "Error Happend: %lu\n", GetLastError();
+		return 1;
+	}
+	else{
+		cout << buffer;
+	}
+	CloseHandle(fileHandle);
+
+	return 0;
+}
