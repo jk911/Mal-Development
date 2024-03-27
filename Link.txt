@@ -1,0 +1,33 @@
+============ Basic Knowlegde ============
+THM Rooms: Windows Internals, Introduction to Windows API, Introduction To AV
+Windows Internals: https://www.youtube.com/watch?v=1t9PrSOlNPk&list=PLt9cUwGw6CYF6Kj19mBZpfhQPsRIC5vGl&index=1
+Windows Internal + Simple Malware: https://www.youtube.com/watch?v=zEk3mi4Pt_E
+OSEP Book And Video (reference)
+
+============ Important Contents ============
+
+===>>> Book
+MalDev Academy Book
+
+===>>> Video
+https://www.youtube.com/watch?v=zEk3mi4Pt_E
+https://www.youtube.com/@Incodenito/videos
+https://www.youtube.com/watch?v=aNEqC-U5tHM&list=PL_z_ep2nxC57sHAlCcvvaYRrpdMIQXri1
+https://www.youtube.com/watch?v=WIdkwzKV6Zk&list=PL_dk67mLCSFHa5jDNvEuXuoafMHmTjn32
+
+===>>> Bypass AV - Blog
+https://www.crow.rip/crows-nest
+https://0xpat.github.io/
+https://www.fo-sec.com/articles/10-defender-bypass-methods
+https://redfoxsecurity.medium.com/antivirus-evasion-26a30f072f76
+https://www.vaadata.com/blog/antivirus-and-edr-bypass-techniques/
+https://pentestlaboratories.com/2021/05/17/amsi-bypass-methods/
+
+===>>> Labs
+Tryhackme module: "Host Evasion" in "Red Team" path
+Tryhackme rooms: Stealth, Avenger, Bandit, Dodge, Hack Smarter Security, Wreath (writeup -> https://0xb0b.gitbook.io/writeups/tryhackme)
+
+============ Explore More ============
+https://malapi.io
+https://dominicbreuker.com/post/learning_sliver_c2_01_installation/
+https://blog.ropnop.com/hosting-clr-in-golang/
