@@ -27,6 +27,9 @@ https://pentestlaboratories.com/2021/05/17/amsi-bypass-methods/
 Tryhackme module: "Host Evasion" in "Red Team" path
 Tryhackme rooms: Stealth, Avenger, Bandit, Dodge, Hack Smarter Security, Wreath (writeup -> https://0xb0b.gitbook.io/writeups/tryhackme)
 
+===>>> Cheatsheet
+Xem phần 4 (Defense Evasion) và phần 5 (Installation): https://github.com/0xsyr0/Red-Team-Playbooks
+
 ============ Explore More ============
 https://malapi.io
 https://dominicbreuker.com/post/learning_sliver_c2_01_installation/
