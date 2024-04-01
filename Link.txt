@@ -31,6 +31,7 @@ Tryhackme rooms: Stealth, Avenger, Bandit, Dodge, Hack Smarter Security, Wreath 
 Xem phần 4 (Defense Evasion) và phần 5 (Installation): https://github.com/0xsyr0/Red-Team-Playbooks
 
 ============ Explore More ============
+UAC Bypass: UAC Bypass: https://redteamer.tips/uac-bypass-through-trusted-folder-abuse/ (user thuộc group adminstrators + bypass AMSI thành công trước đó)
 https://malapi.io
 https://dominicbreuker.com/post/learning_sliver_c2_01_installation/
 https://blog.ropnop.com/hosting-clr-in-golang/
