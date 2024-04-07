@@ -26,7 +26,7 @@ https://cocomelonc.github.io - https://github.com/cocomelonc
 
 ===>>> Labs
 Tryhackme module: "Host Evasion" in "Red Team" path
-Tryhackme rooms: Stealth, Avenger, Bandit, Dodge, Hack Smarter Security, Wreath (writeup -> https://0xb0b.gitbook.io/writeups/tryhackme)
+Tryhackme rooms: Stealth, Avenger, Bandit, Dodge, Hack Smarter Security, Bypass, Wreath, Anti-Reverse Engineering, Red team capstone challenge (writeup -> https://0xb0b.gitbook.io/writeups/tryhackme)
 
 ===>>> Cheatsheet
 Xem phần 4 (Defense Evasion) và phần 5 (Installation): https://github.com/0xsyr0/Red-Team-Playbooks
