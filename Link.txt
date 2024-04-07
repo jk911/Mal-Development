@@ -22,6 +22,7 @@ https://www.fo-sec.com/articles/10-defender-bypass-methods
 https://redfoxsecurity.medium.com/antivirus-evasion-26a30f072f76
 https://www.vaadata.com/blog/antivirus-and-edr-bypass-techniques/
 https://pentestlaboratories.com/2021/05/17/amsi-bypass-methods/
+https://cocomelonc.github.io - https://github.com/cocomelonc 
 
 ===>>> Labs
 Tryhackme module: "Host Evasion" in "Red Team" path
